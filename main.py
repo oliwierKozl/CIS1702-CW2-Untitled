@@ -1,25 +1,63 @@
 # CIS 1702 - CW2 - Inventory Management System
 '''
 TODO:
-- Add a directory tree to see what submenu you are in etc.
+- Add a directory tree to see what submenu you are in etc. - DONE
 - add actual data handling (json read/write) - oliver
 - input validation - luca
 - testing
 -
 '''
+# python
+import sys
 
-# Basic main functionality
+# Default path variable
+current_path = ["Inventory Management System", "Main Menu"]
+persistent_logs = []
+
+# Clears screen when going to a new menu.
+def clear_screen():
+    if sys.stdout.isatty():
+        print("\033[2J\033[H", end="", flush=True)
+    else:
+        print("\n" * 100, end="", flush=True)
+
+# Keeps persistance for important stuff like search results or view stock etc..
+def log(msg: str):
+    persistent_logs.append(msg)
+    print(msg)
+# current path and location
+def push_location(name: str):
+    current_path.append(name)
+
+def pop_location():
+    if len(current_path) > 1:
+        current_path.pop()
+
+# actual string formatting for the directory tree
+def show_location():
+    clear_screen()
+    app = current_path[0]
+    parts = current_path[1:]
+    if parts:
+        location = " > ".join(parts[:-1] + [f"«{parts[-1]}»"]) if len(parts) > 1 else f"«{parts[0]}»"
+    else:
+        location = f"«{app}»"
+    print(f"{app} - {location}")
+    if persistent_logs:
+        print()  # space between header and logs
+        for msg in persistent_logs:
+            print(msg)
+
+# main and submenu function
 def Main():
     while True:
-        print("\n=== Inventory Management System ===")
+        show_location()
         print("1. Add Item")
         print("2. View Stock")
         print("3. Update Item")
         print("4. Search")
         print("q. Quit")
-
         choice = input("Select an option: ").strip().lower()
-
         if choice == '1':
             AddItem()
         elif choice == '2':
@@ -29,94 +67,95 @@ def Main():
         elif choice == '4':
             Search()
         elif choice == 'q':
-            print("Quitting program.")
             break
-        else:
-            print("Invalid choice, please try again.")
 
-# guessing what we might store - can remove/change or add options later.
 def AddItem():
-    print("\n--- Add New Item ---")
-    item_id = input("Enter item ID: (id system not figured out yet, enter anything) ")
+    push_location("Add Item")
+    show_location()
+    item_id = input("Enter item ID: ")
     name = input("Enter item name: ")
     price = input("Enter item price: ")
     quantity = input("Enter item quantity: ")
-
-    # placeholder for adding logic later - whatever oliver does with the json stuff will change this.
-    print(f"\nItem Added (preview): ID={item_id}, Name={name}, Price={price}, Quantity={quantity}")
+    log(f"Added: ID={item_id}, Name={name}, Price={price}, Qty={quantity}")
+    pop_location()
 
 def ViewStock():
-    print("\n--- View Stock ---")
-    # placeholder for later json data display
-    print("(This would display all inventory items in a table format. (needs json stuff tho)")
+    push_location("View Stock (placeholder)")
+    show_location()
+    log("(no items yet)")
+    pop_location()
 
 def UpdateItem():
+    push_location("Update Item")
     while True:
-        print("\n--- Update Item ---")
+        show_location()
         print("1. Edit Item")
         print("2. Delete Item")
-        print("b. Back to Main Menu")
-
-        sub_choice = input("Select an option: ").strip().lower()
-
-        if sub_choice == '1':
+        print("b. Back")
+        sub = input("Select: ").strip().lower()
+        if sub == '1':
             EditItem()
-        elif sub_choice == '2':
+        elif sub == '2':
             DeleteItem()
-        elif sub_choice == 'b':
+        elif sub == 'b':
             break
-        else:
-            print("Invalid choice, please try again.")
+    pop_location()
 
 def EditItem():
-    print("\n--- Edit Item ---")
-    item_id = input("Enter the ID of the item to edit: ")
-    print("Enter new values (leave blank to keep current):")
-    new_name = input("New name: ")
-    new_price = input("New price: ")
-    new_quantity = input("New quantity: ")
-    print(f"\nEditing item {item_id} with changes -> Name: {new_name}, Price: {new_price}, Quantity: {new_quantity}")
+    push_location("Edit Item")
+    show_location()
+    item_id = input("ID to edit: ")
+    new_name = input("New name (leave blank to keep): ")
+    log(f"Edited {item_id} -> Name={new_name or '(unchanged)'}")
+    pop_location()
 
 def DeleteItem():
-    print("\n--- Delete Item ---")
-    item_id = input("Enter the ID of the item to delete: ")
-    print(f"Item with ID {item_id} would be deleted (placeholder).")
+    push_location("Delete Item")
+    show_location()
+    item_id = input("ID to delete: ")
+    log(f"Deleted (placeholder) {item_id}")
+    pop_location()
 
 def Search():
+    push_location("Search")
     while True:
-        print("\n--- Search ---")
-        print("1. Search by Name")
-        print("2. Search by Price")
-        print("3. Search by Quantity")
-        print("b. Back to Main Menu")
-
-        search_choice = input("Select an option: ").strip().lower()
-
-        if search_choice == '1':
+        show_location()
+        print("1. By Name")
+        print("2. By Price")
+        print("3. By Quantity")
+        print("b. Back")
+        s = input("Select: ").strip().lower()
+        if s == '1':
             SearchByName()
-        elif search_choice == '2':
+        elif s == '2':
             SearchByPrice()
-        elif search_choice == '3':
+        elif s == '3':
             SearchByQuantity()
-        elif search_choice == 'b':
+        elif s == 'b':
             break
-        else:
-            print("Invalid choice, please try again.")
+    pop_location()
 
+# this is kinda fucked rn but we ball
 def SearchByName():
-    print("\n--- Search by Name ---")
-    name = input("Enter item name to search: ")
-    print(f"Searching for items with name '{name}' (placeholder).")
+    push_location("Search by Name")
+    show_location()
+    q = input("Name: ")
+    log(f"Searching for '{q}' (placeholder)")
+    pop_location()
 
 def SearchByPrice():
-    print("\n--- Search by Price ---")
-    price = input("Enter price to search: ")
-    print(f"Searching for items with price '{price}' (placeholder).")
+    push_location("Search by Price")
+    show_location()
+    q = input("Price: ")
+    log(f"Searching for '{q}' (placeholder)")
+    pop_location()
 
 def SearchByQuantity():
-    print("\n--- Search by Quantity ---")
-    quantity = input("Enter quantity to search: ")
-    print(f"Searching for items with quantity '{quantity}' (placeholder).")
+    push_location("Search by Quantity")
+    show_location()
+    q = input("Quantity: ")
+    log(f"Searching for '{q}' (placeholder)")
+    pop_location()
 
 if __name__ == "__main__":
     Main()
