@@ -11,11 +11,11 @@ TODO:
 import sys
 
 # Default path variable
-current_path = ["Inventory Management System", "Main Menu"]
-persistent_logs = []
+CurrentPath = ["Inventory Management System", "Main Menu"]
+PersistantLogs = []
 
 # Clears screen when going to a new menu.
-def clear_screen():
+def ClearScreen():
     if sys.stdout.isatty():
         print("\033[2J\033[H", end="", flush=True)
     else:
@@ -23,35 +23,35 @@ def clear_screen():
 
 # Keeps persistance for important stuff like search results or view stock etc..
 def log(msg: str):
-    persistent_logs.append(msg)
+    PersistantLogs.append(msg)
     print(msg)
 # current path and location
-def push_location(name: str):
-    current_path.append(name)
+def PushLocation(name: str):
+    CurrentPath.append(name)
 
-def pop_location():
-    if len(current_path) > 1:
-        current_path.pop()
+def PopLocation():
+    if len(CurrentPath) > 1:
+        CurrentPath.pop()
 
 # actual string formatting for the directory tree
-def show_location():
-    clear_screen()
-    app = current_path[0]
-    parts = current_path[1:]
+def ShowLocation():
+    ClearScreen()
+    app = CurrentPath[0]
+    parts = CurrentPath[1:]
     if parts:
         location = " > ".join(parts[:-1] + [f"«{parts[-1]}»"]) if len(parts) > 1 else f"«{parts[0]}»"
     else:
         location = f"«{app}»"
     print(f"{app} - {location}")
-    if persistent_logs:
+    if PersistantLogs:
         print()  # space between header and logs
-        for msg in persistent_logs:
+        for msg in PersistentLogs:
             print(msg)
 
 # main and submenu function
 def Main():
     while True:
-        show_location()
+        ShowLocation()
         print("1. Add Item")
         print("2. View Stock")
         print("3. Update Item")
@@ -70,25 +70,25 @@ def Main():
             break
 
 def AddItem():
-    push_location("Add Item")
-    show_location()
+    PushLocation("Add Item")
+    ShowLocation()
     item_id = input("Enter item ID: ")
     name = input("Enter item name: ")
     price = input("Enter item price: ")
     quantity = input("Enter item quantity: ")
     log(f"Added: ID={item_id}, Name={name}, Price={price}, Qty={quantity}")
-    pop_location()
+    PopLocation()
 
 def ViewStock():
-    push_location("View Stock (placeholder)")
-    show_location()
+    PushLocation("View Stock (placeholder)")
+    ShowLocation()
     log("(no items yet)")
-    pop_location()
+    PopLocation()
 
 def UpdateItem():
-    push_location("Update Item")
+    PushLocation("Update Item")
     while True:
-        show_location()
+        ShowLocation()
         print("1. Edit Item")
         print("2. Delete Item")
         print("b. Back")
@@ -99,27 +99,25 @@ def UpdateItem():
             DeleteItem()
         elif sub == 'b':
             break
-    pop_location()
+    PopLocation()
 
 def EditItem():
-    push_location("Edit Item")
-    show_location()
-    item_id = input("ID to edit: ")
+    PushLocation("Edit Item")
+    ShowLocation()
     new_name = input("New name (leave blank to keep): ")
     log(f"Edited {item_id} -> Name={new_name or '(unchanged)'}")
-    pop_location()
+    PopLocation()
 
 def DeleteItem():
-    push_location("Delete Item")
-    show_location()
-    item_id = input("ID to delete: ")
+    PushLocation("Delete Item")
+    ShowLocation
     log(f"Deleted (placeholder) {item_id}")
-    pop_location()
+    PopLocation()
 
 def Search():
-    push_location("Search")
+    PushLocation("Search")
     while True:
-        show_location()
+        ShowLocation()
         print("1. By Name")
         print("2. By Price")
         print("3. By Quantity")
@@ -133,29 +131,29 @@ def Search():
             SearchByQuantity()
         elif s == 'b':
             break
-    pop_location()
+    PopLocation()
 
 # this is kinda fucked rn but we ball
 def SearchByName():
-    push_location("Search by Name")
-    show_location()
+    PushLocation("Search by Name")
+    ShowLocation()
     q = input("Name: ")
     log(f"Searching for '{q}' (placeholder)")
-    pop_location()
+    PopLocation()
 
 def SearchByPrice():
-    push_location("Search by Price")
-    show_location()
+    PushLocation("Search by Price")
+    ShowLocation()
     q = input("Price: ")
     log(f"Searching for '{q}' (placeholder)")
-    pop_location()
+    PopLocation()
 
 def SearchByQuantity():
-    push_location("Search by Quantity")
-    show_location()
+    PushLocation("Search by Quantity")
+    ShowLocation()
     q = input("Quantity: ")
     log(f"Searching for '{q}' (placeholder)")
-    pop_location()
+    PopLocation()
 
 if __name__ == "__main__":
     Main()
