@@ -4,7 +4,8 @@
 
 10/11/25 - 6/1/26
 
-This is our group project for our 2025/26 programming 1 module coursework 2. Project brief:
+This is our group project for our 2025/26 programming 1 module coursework 2. 
+Project brief:
 "Create a command-line application to help a small business owner track product inventory. The system must allow the user to add, view, update, and remove stock items, and save the data between sessions"
 
 Chosen project: command line inventory management system
