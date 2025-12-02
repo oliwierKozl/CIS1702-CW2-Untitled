@@ -4,16 +4,18 @@
 
 10/11/25 - 6/1/26
 
+This is our group project for our 2025/26 programming 1 module coursework 2. Project brief:
+"Create a command-line application to help a small business owner track product inventory. The system must allow the user to add, view, update, and remove stock items, and save the data between sessions"
+
 Chosen project: command line inventory management system
 Group name: untitled
 Group members and roles:
 - Oliver Kazlowski: backend/json schema
 - Spencer Berry: testing 
 - Michael Robertson: UX/frontend
-- Luca Ponterosso: documentation 
+- Luca Ponterosso: documentation
 
-This is our group project for our 2025/26 programming 1 module coursework 2. Project brief:
-"Create a command-line application to help a small business owner track product inventory. The system must allow the user to add, view, update, and remove stock items, and save the data between sessions"
+---
 
 Core functionality goals:
 - Store data in a file
