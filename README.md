@@ -32,3 +32,6 @@ Potential extensions:
 - Generate low stock report for items below a certain threshold
 - Add functionality to track sales
 - Improve search feature to search by other characteristics (price, stock, etc)
+
+## Testing
+Testing will be focused primariliy towards user testing and specifically how the system reacts to user inputs. Our testing plan contains all the testing that will conducted, the testing plan has outcomes the system should do. We document what the system did and specify whether or not the test has passed or failed. If it has failed, we need to address what may have failed. If it has passed after failing beforehand, we will address what has been changed/fixed and document those changes. 
