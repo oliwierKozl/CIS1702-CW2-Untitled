@@ -8,7 +8,8 @@ TODO:
 -
 '''
 # python
-import sys
+import sys, uuid
+import datahandler
 
 # Default path variable
 CurrentPath = ["Inventory Management System", "Main Menu"]
@@ -72,7 +73,8 @@ def Main():
 def AddItem():
     PushLocation("Add Item")
     ShowLocation()
-    item_id = input("Enter item ID: ")
+    item_id = str(uuid.uuid4())[:4] # Get only 4 characters of the generated UUID
+    datahandler.AddItem("Test", "10", "1")
     name = input("Enter item name: ")
     price = input("Enter item price: ")
     quantity = input("Enter item quantity: ")
