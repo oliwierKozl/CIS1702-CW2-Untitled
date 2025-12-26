@@ -3,7 +3,10 @@
         "item_id": 1,
         "quantity": 0,
         "price": 10
+    },
+    "Keyboard": {
+        "item_id": "a00c3884-bddb-449f-a091-b044dd054485",
+        "quantity": "1",
+        "price": "100"
     }
-    
-
 }
