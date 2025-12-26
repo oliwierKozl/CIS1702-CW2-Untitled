@@ -1,4 +1,3 @@
-
 # // Imports \\
 import sys
 import json
@@ -6,14 +5,12 @@ import uuid
 
 # // Functions \\ 
 
-# Adds item into the data.json file
-def AddItem(item_name, price, quantity):
-    # Open file
+def add_item(itemName, price, quantity):
     with open("data.json", "r+") as file:
         json_file = json.load(file) # Load json
 
         # Prevent duplicates
-        if item_name in json_file:
+        if itemName in json_file:
             return "Item already exists"
 
         # New item
@@ -23,7 +20,7 @@ def AddItem(item_name, price, quantity):
             "price": price,
         }
         
-        json_file[item_name] = new_item # Add new item
+        json_file[itemName] = new_item # Add new item
         file.seek(0)
         json.dump(json_file, file, indent=4) # Dump JSON, set indent to 4 for better looking JSON file
         file.close() # Close
