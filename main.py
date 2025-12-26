@@ -73,12 +73,12 @@ def Main():
 def AddItem():
     PushLocation("Add Item")
     ShowLocation()
-    item_id = str(uuid.uuid4())[:4] # Get only 4 characters of the generated UUID
-    datahandler.AddItem("Test", "10", "1")
     name = input("Enter item name: ")
     price = input("Enter item price: ")
     quantity = input("Enter item quantity: ")
-    log(f"Added: ID={item_id}, Name={name}, Price={price}, Qty={quantity}")
+
+    result = datahandler.AddItem(name, price, quantity)
+    log(result) # Print if item has been added or not. 
     PopLocation()
 
 def ViewStock():
