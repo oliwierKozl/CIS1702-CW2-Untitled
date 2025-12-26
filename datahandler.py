@@ -25,4 +25,19 @@ def add_item(itemName, price, quantity):
         json.dump(json_file, file, indent=4) # Dump JSON, set indent to 4 for better looking JSON file
         file.close() # Close
 
-        return f"Added: Name={item_name}, Price={price}, Qty={quantity}"
+        return f"Added: Name={itemName}, Price={price}, Qty={quantity}"
+    
+
+def view_all():
+    with open("data.json", "r") as file:
+        json_file = json.load(file)
+        
+        item_list = {}
+        for item in json_file:
+            # Ensure item is not a test item, these are noted with "-" at the start
+            if item[1] != "-":
+                item_list[item] = json_file[item] # Add the non test items to the list for display
+
+        file.close()        
+        return item_list # Return a clean list with all items
+
