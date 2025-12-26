@@ -1,14 +1,11 @@
-
 # // Imports \\
 import sys
 import json
 
 # // Functions \\ 
 
-# Adds item into the data.json file
-def AddItem(itemName, price, quantity):
-    # Open file
+def add_item(itemName, price, quantity):
     with open("data.json", "r+") as file:
         file.seek(0)
-        jsonFile = json.load(file)
-        print(jsonFile)
+        json_file = json.load(file)
+        print(json_file)

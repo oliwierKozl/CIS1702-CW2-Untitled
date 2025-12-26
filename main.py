@@ -1,161 +1,177 @@
 # CIS 1702 - CW2 - Inventory Management System
-'''
+"""
 TODO:
 - Add a directory tree to see what submenu you are in etc. - DONE
 - add actual data handling (json read/write) - oliver
 - input validation - luca
 - testing
--
-'''
-# python
+"""
+
+# Python.
 import sys, uuid
 import datahandler
 
-# Default path variable
-CurrentPath = ["Inventory Management System", "Main Menu"]
-PersistantLogs = []
+# Path always includes "Inventory management system" and "Main Menu".
+current_path = ["Inventory Management System", "Main Menu"]
+persistent_logs = []
 
-# Clears screen when going to a new menu.
-def ClearScreen():
+def clear_screen():
     if sys.stdout.isatty():
         print("\033[2J\033[H", end="", flush=True)
     else:
         print("\n" * 100, end="", flush=True)
 
-# Keeps persistance for important stuff like search results or view stock etc..
+# Persistence for relevant things (e.g. view stock, search results).
 def log(msg: str):
-    PersistantLogs.append(msg)
+    persistent_logs.append(msg)
     print(msg)
-# current path and location
-def PushLocation(name: str):
-    CurrentPath.append(name)
+    
+# Current path and location.
+def push_location(name: str):
+    current_path.append(name)
 
-def PopLocation():
-    if len(CurrentPath) > 1:
-        CurrentPath.pop()
+def pop_location():
+    if len(current_path) > 1:
+        current_path.pop()
 
-# actual string formatting for the directory tree
-def ShowLocation():
-    ClearScreen()
-    app = CurrentPath[0]
-    parts = CurrentPath[1:]
+# String formatting for the directory tree.
+def show_location():
+    clear_screen()
+    app_name = current_path[0]
+    parts = current_path[1:]
     if parts:
-        location = " > ".join(parts[:-1] + [f"«{parts[-1]}»"]) if len(parts) > 1 else f"«{parts[0]}»"
+        location = (
+            " > ".join(parts[:-1] + [f"«{parts[-1]}»"]) 
+            if len(parts) > 1 
+            else f"«{parts[0]}»"
+        )
     else:
-        location = f"«{app}»"
-    print(f"{app} - {location}")
-    if PersistantLogs:
-        print()  # space between header and logs
-        for msg in PersistentLogs:
+        location = f"«{app_name}»"
+    print(f"{app_name} - {location}")
+    if persistent_logs:
+        print("\n")  # Space between header and logs.
+        for msg in persistent_logs:
             print(msg)
 
-# main and submenu function
-def Main():
+def main():
     while True:
-        ShowLocation()
-        print("1. Add Item")
-        print("2. View Stock")
-        print("3. Update Item")
-        print("4. Search")
-        print("q. Quit")
-        choice = input("Select an option: ").strip().lower()
-        if choice == '1':
-            AddItem()
-        elif choice == '2':
-            ViewStock()
-        elif choice == '3':
-            UpdateItem()
-        elif choice == '4':
-            Search()
-        elif choice == 'q':
+        show_location()
+        choice = input(
+            "1. Add Item\n"
+            "2. View Stock\n"
+            "3. Update Item\n"
+            "4. Search\n"
+            "q. Quit\n"
+            "Select: "
+            ).strip().lower()
+        if choice == "1":
+            add_item()
+        elif choice == "2":
+            view_stock()
+        elif choice == "3":
+            update_item()
+        elif choice == "4":
+            search()
+        elif choice == "q":
             break
 
-def AddItem():
-    PushLocation("Add Item")
-    ShowLocation()
-    item_id = str(uuid.uuid4())[:4] # Get only 4 characters of the generated UUID
-    datahandler.AddItem("Test", "10", "1")
-    name = input("Enter item name: ")
-    price = input("Enter item price: ")
-    quantity = input("Enter item quantity: ")
+def add_item():
+    push_location("Add Item")
+    show_location()
+    item_id = str(uuid.uuid4())[:4]
+    datahandler.add_item("Test", "10", "1")
+    name = input("Enter item name: ").strip()
+    price = input("Enter item price: ").strip()
+    quantity = input("Enter item quantity: ").strip()
     log(f"Added: ID={item_id}, Name={name}, Price={price}, Qty={quantity}")
-    PopLocation()
+    pop_location()
 
-def ViewStock():
-    PushLocation("View Stock (placeholder)")
-    ShowLocation()
+# Dysfunctional - awaiting full implementation.
+def view_stock():
+    push_location("View Stock (placeholder)")
+    show_location()
     log("(no items yet)")
-    PopLocation()
+    pop_location()
 
-def UpdateItem():
-    PushLocation("Update Item")
+# Includes delete item function.
+def update_item():
+    push_location("Update Item")
     while True:
-        ShowLocation()
-        print("1. Edit Item")
-        print("2. Delete Item")
-        print("b. Back")
-        sub = input("Select: ").strip().lower()
-        if sub == '1':
-            EditItem()
-        elif sub == '2':
-            DeleteItem()
-        elif sub == 'b':
+        show_location()
+        update_search = input(
+            "1. Edit Item\n"
+            "2. Delete Item\n"
+            "b. Back\n"
+            "Select: "
+        ).strip().lower()
+        if update_search == "1":
+            edit_item()
+        elif update_search == "2":
+            delete_item()
+        elif update_search == "b":
             break
-    PopLocation()
+    pop_location()
 
-def EditItem():
-    PushLocation("Edit Item")
-    ShowLocation()
+# Dysfunctional - awaiting full implementation.
+def edit_item():
+    push_location("Edit Item")
+    show_location()
     new_name = input("New name (leave blank to keep): ")
     log(f"Edited {item_id} -> Name={new_name or '(unchanged)'}")
-    PopLocation()
+    pop_location()
 
-def DeleteItem():
-    PushLocation("Delete Item")
-    ShowLocation
+# Dysfunctional - awaiting full implementation.
+def delete_item():
+    push_location("Delete Item")
+    show_location
     log(f"Deleted (placeholder) {item_id}")
-    PopLocation()
+    pop_location()
 
-def Search():
-    PushLocation("Search")
+#Dysfunctional - awaiting full implementation.
+def search():
+    push_location("Search")
     while True:
-        ShowLocation()
-        print("1. By Name")
-        print("2. By Price")
-        print("3. By Quantity")
-        print("b. Back")
-        s = input("Select: ").strip().lower()
-        if s == '1':
-            SearchByName()
-        elif s == '2':
-            SearchByPrice()
-        elif s == '3':
-            SearchByQuantity()
-        elif s == 'b':
+        show_location()
+        search_choice = input(
+            "1. By Name\n"
+            "2. By Price\n"
+            "3. By Quantity\n"
+            "b. back\n"
+            "Select: "
+        ).strip().lower()
+        if search_choice == "1":
+            search_by_name()
+        elif search_choice == "2":
+            search_by_price()
+        elif search_choice == "3":
+            search_by_quantity()
+        elif search_choice == "b":
             break
-    PopLocation()
+    pop_location()
 
-# this is kinda fucked rn but we ball
-def SearchByName():
-    PushLocation("Search by Name")
-    ShowLocation()
+# Dysfunctional - awating full implementation.
+def search_by_name():
+    push_location("Search by Name")
+    show_location()
     q = input("Name: ")
-    log(f"Searching for '{q}' (placeholder)")
-    PopLocation()
+    log(f"Searching for \"{q} (placeholder)")
+    pop_location()
 
-def SearchByPrice():
-    PushLocation("Search by Price")
-    ShowLocation()
+# Dysfunctional - awating full implementation.
+def search_by_price():
+    push_location("Search by Price")
+    show_location()
     q = input("Price: ")
     log(f"Searching for '{q}' (placeholder)")
-    PopLocation()
+    pop_location()
 
-def SearchByQuantity():
-    PushLocation("Search by Quantity")
-    ShowLocation()
+# Dysfunctional - awating full implementation.
+def search_by_quantity():
+    push_location("Search by Quantity")
+    show_location()
     q = input("Quantity: ")
     log(f"Searching for '{q}' (placeholder)")
-    PopLocation()
+    pop_location()
 
 if __name__ == "__main__":
-    Main()
+    main()
