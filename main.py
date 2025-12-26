@@ -78,12 +78,11 @@ def main():
 def add_item():
     push_location("Add Item")
     show_location()
-    item_id = str(uuid.uuid4())[:4]
-    datahandler.add_item("Test", "10", "1")
     name = input("Enter item name: ").strip()
     price = input("Enter item price: ").strip()
     quantity = input("Enter item quantity: ").strip()
-    log(f"Added: ID={item_id}, Name={name}, Price={price}, Qty={quantity}")
+    result = datahandler.add_item(name, price, quantity) # Add item
+    log(result)
     pop_location()
 
 # Dysfunctional - awaiting full implementation.
