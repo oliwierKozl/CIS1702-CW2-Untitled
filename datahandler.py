@@ -35,9 +35,17 @@ def view_all():
         item_list = {}
         for item in json_file:
             # Ensure item is not a test item, these are noted with "-" at the start
-            if item[1] != "-":
+            if item[0] != "-":
                 item_list[item] = json_file[item] # Add the non test items to the list for display
 
         file.close()        
         return item_list # Return a clean list with all items
 
+def view_item(item_name):
+    with open("data.json", "r") as file:
+        json_file = json.load(file)
+        
+        if json_file[item_name]:
+            return json_file[item_name]
+        else:
+            return "Item not found"
