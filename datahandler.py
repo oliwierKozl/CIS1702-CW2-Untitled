@@ -45,7 +45,30 @@ def view_item(item_name):
     with open("data.json", "r") as file:
         json_file = json.load(file)
         
+        # Check if item exists
         if json_file[item_name]:
-            return json_file[item_name]
+            file.close()
+            return json_file[item_name] # Return a list with the item's properties
         else:
+            file.close()
             return "Item not found"
+        
+
+def update_item(item, property, value):
+    with open("data.json", "r+") as file:
+        json_file = json.load(file)
+
+        # Check if passed in item exists
+        if json_file[item]:
+            # Check if passed in property exists
+            if json_file[item][property]:
+                json_file[json_file][property] = value # Update the value of the passed in property with value
+            
+            else:
+                file.close()
+                return "Property does not exist"
+        else:
+            file.close()
+            return "Item does not exist"
+        
+        json.dump(json_file, file, indent=4) # Dump JSON, set indent to 4 for better looking JSON file

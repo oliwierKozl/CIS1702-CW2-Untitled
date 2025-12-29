@@ -152,8 +152,15 @@ def search():
 def search_by_name():
     push_location("Search by Name")
     show_location()
-    q = input("Name: ")
-    log(f"Searching for \"{q} (placeholder)")
+    q = input("Name: ") 
+    item = datahandler.view_item(q)
+    if type(item) == str:
+        log(item)
+    else:
+        log(f"Results for item {q}")
+        log(f"ID: {item['item_id']}")
+        log(f"Price: {item['price']}")
+        log(f"Quantity: {item['quantity']}")
     pop_location()
 
 # Dysfunctional - awating full implementation.
