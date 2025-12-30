@@ -72,3 +72,31 @@ def update_item(item, property, value):
             return "Item does not exist"
         
         json.dump(json_file, file, indent=4) # Dump JSON, set indent to 4 for better looking JSON file
+
+def search_by_price(price):
+    with open("data.json", "r") as file:
+        json_file = json.load(file)
+
+        results = {} # Dict of all items with the price
+
+        # Search items in the JSON dict
+        for item, value in json_file.items():
+            
+            # Check for test items
+            if item[0] == "-":
+                continue
+            else:
+                if value["price"] == price:
+                    results[item] = value # Enter the data into the results dict
+                    continue
+                else:
+                    continue
+        
+        file.close()
+        return results
+
+
+
+
+
+print(search_by_price(2))

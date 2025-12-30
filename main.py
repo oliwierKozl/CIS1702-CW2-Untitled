@@ -168,7 +168,19 @@ def search_by_price():
     push_location("Search by Price")
     show_location()
     q = input("Price: ")
-    log(f"Searching for '{q}' (placeholder)")
+    results = datahandler.search_by_price(q)
+
+    # Check if there are any results
+    if len(results) < 1:
+        log("No items found")
+    else:
+        for item, value in results.items():
+            log(f"Item name: {item}")
+            log(f"Item ID: {value["item_id"]}")
+            log(f"Price: {value['price']}")
+            log(f"Quantity: {value['quantity']}")
+            log("\n--------\n")
+
     pop_location()
 
 # Dysfunctional - awating full implementation.
