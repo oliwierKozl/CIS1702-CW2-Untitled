@@ -89,7 +89,13 @@ def add_item():
 def view_stock():
     push_location("View Stock (placeholder)")
     show_location()
-    log("(no items yet)")
+    stock = datahandler.view_all()
+    if len(stock) == 0:
+        log("Nothing is in stock")
+    else:
+        for item in stock:
+            log(item)
+
     pop_location()
 
 # Includes delete item function.
@@ -116,15 +122,23 @@ def edit_item():
     push_location("Edit Item")
     show_location()
     new_name = input("New name (leave blank to keep): ")
-    log(f"Edited {item_id} -> Name={new_name or '(unchanged)'}")
+    log(f"Edited {'item_id'} -> Name={new_name or '(unchanged)'}")
     pop_location()
 
 # Dysfunctional - awaiting full implementation.
 def delete_item():
     push_location("Delete Item")
-    show_location
-    log(f"Deleted (placeholder) {item_id}")
+    show_location()
+    stock = datahandler.view_all()
+    if len(stock) == 0:
+        log("No items in stock")
+    else:
+        print(stock)
+        item = input("Which item would you like to delete: ").capitalize()
+        deleted_item = datahandler.delete_item(item)
+        log(f"Deleted ({deleted_item[1]}) ")
     pop_location()
+
 
 #Dysfunctional - awaiting full implementation.
 def search():
@@ -176,7 +190,7 @@ def search_by_price():
     else:
         for item, value in results.items():
             log(f"Item name: {item}")
-            log(f"Item ID: {value["item_id"]}")
+            log(f"Item ID: {value['item_id']}")
             log(f"Price: {value['price']}")
             log(f"Quantity: {value['quantity']}")
             log("\n--------\n")
@@ -196,7 +210,7 @@ def search_by_quantity():
     else:
         for item, value in results.items():
             log(f"Item name: {item}")
-            log(f"Item ID: {value["item_id"]}")
+            log(f"Item ID: {value['item_id']}")
             log(f"Price: {value['price']}")
             log(f"Quantity: {value['quantity']}")
             
