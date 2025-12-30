@@ -6,6 +6,15 @@ import uuid
 # // Functions \\ 
 
 def add_item(itemName, price, quantity):
+    # Input validation
+    if type(price) != int or type(quantity) != int:
+
+        try:
+            price = int(price)
+            quantity = int(quantity)
+        except:
+            return "Price and quantity must be integers"
+
     with open("data.json", "r+") as file:
         json_file = json.load(file) # Load json
 
@@ -55,6 +64,13 @@ def view_item(item_name):
         
 
 def update_item(item, property, value):
+    # Input validation
+    if type(value) != int:
+        try:
+            value = int(value)
+        except:
+            return "New value must be an integer"
+        
     with open("data.json", "r+") as file:
         json_file = json.load(file)
 
@@ -74,6 +90,14 @@ def update_item(item, property, value):
         json.dump(json_file, file, indent=4) # Dump JSON, set indent to 4 for better looking JSON file
 
 def search_by_price(price):
+    # Input validation
+    if type(price) != int:
+
+        try:
+            price = int(price)
+        except:
+            return "Price must be an integer"
+        
     with open("data.json", "r") as file:
         json_file = json.load(file)
 
@@ -96,6 +120,14 @@ def search_by_price(price):
         return results
 
 def search_by_quantity(quantity):
+    # Input validation
+    if type(quantity) != int:
+
+        try:
+            quantity = int(quantity)
+        except:
+            return "Quantity must be an integer"
+        
     with open("data.json", "r") as file:
         json_file = json.load(file)
 
