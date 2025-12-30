@@ -148,3 +148,38 @@ def search_by_quantity(quantity):
         
         file.close()
         return results
+
+def delete_item(deletedItem):
+    with open("data.json", "r") as file:
+        json_file = json.load(file)
+        found = False
+
+        # Search items in the JSON dict until it finds the item we want to delete
+        while not found:
+            for item, value in json_file.items():
+
+                if item == deletedItem:
+                    # Values to be returned into main
+                    item_found = [item, value.get("item_id")]
+                    #Stop while loop if found
+                    found = True
+
+
+                else:
+                    pass
+            print("item not found")
+            break
+
+        if found:
+            del json_file[item]
+
+
+        # Write the updated json to json file
+        with open('data.json', 'w') as file:
+
+            # write updated data
+            json.dump(json_file, file, indent=4)
+            file.close()
+        return item_found
+
+
