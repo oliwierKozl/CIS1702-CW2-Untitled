@@ -188,7 +188,19 @@ def search_by_quantity():
     push_location("Search by Quantity")
     show_location()
     q = input("Quantity: ")
-    log(f"Searching for '{q}' (placeholder)")
+    results = datahandler.search_by_quantity(q)
+
+    # Check if there are any results
+    if len(results) < 1:
+        log("No items found")
+    else:
+        for item, value in results.items():
+            log(f"Item name: {item}")
+            log(f"Item ID: {value["item_id"]}")
+            log(f"Price: {value['price']}")
+            log(f"Quantity: {value['quantity']}")
+            
+            log("\n--------\n")
     pop_location()
 
 if __name__ == "__main__":

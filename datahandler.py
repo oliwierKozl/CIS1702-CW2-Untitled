@@ -95,8 +95,24 @@ def search_by_price(price):
         file.close()
         return results
 
+def search_by_quantity(quantity):
+    with open("data.json", "r") as file:
+        json_file = json.load(file)
 
+        results = {} # Dict of all items with the price
 
-
-
-print(search_by_price(2))
+        # Search items in the JSON dict
+        for item, value in json_file.items():
+            
+            # Check for test items
+            if item[0] == "-":
+                continue
+            else:
+                if value["quantity"] == quantity:
+                    results[item] = value # Enter the data into the results dict
+                    continue
+                else:
+                    continue
+        
+        file.close()
+        return results
