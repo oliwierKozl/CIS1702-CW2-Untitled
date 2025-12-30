@@ -4,9 +4,9 @@
         "quantity": 0,
         "price": 10
     },
-    "Keyboard": {
-        "item_id": "6bd0",
-        "quantity": "2",
-        "price": "100"
+    "Mouse": {
+        "item_id": "6c19",
+        "quantity": 100,
+        "price": 35
     }
 }
