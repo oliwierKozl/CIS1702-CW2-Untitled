@@ -135,6 +135,7 @@ def delete_item():
 
     if len(stock) == 0:
         log("No items in stock")
+
     else:
         log(stock)
         item = input("Which item would you like to delete: ").capitalize()

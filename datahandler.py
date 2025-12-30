@@ -163,16 +163,12 @@ def delete_item(deletedItem):
                     item_found = [item, value.get("item_id")]
                     #Stop while loop if found
                     found = True
-
-
                 else:
                     pass
             print("item not found")
             break
-
         if found:
             del json_file[item]
-
 
         # Write the updated json to json file
         with open('data.json', 'w') as file:
