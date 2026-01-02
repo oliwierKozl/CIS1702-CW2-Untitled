@@ -77,17 +77,23 @@ def update_item(item, property, value):
         # Check if passed in item exists
         if json_file[item]:
             # Check if passed in property exists
+            print(json_file[item][property])
             if json_file[item][property]:
-                json_file[json_file][property] = value # Update the value of the passed in property with value
-            
+                json_file[item][property] = value # Update the value of the passed in property with value
+                print(json_file)
             else:
                 file.close()
                 return "Property does not exist"
         else:
             file.close()
             return "Item does not exist"
-        
-        json.dump(json_file, file, indent=4) # Dump JSON, set indent to 4 for better looking JSON file
+        with open('data.json', 'w') as file:
+
+            # write updated data
+            json.dump(json_file, file, indent=4) # Dump JSON, set indent to 4 for better looking JSON file
+            file.close()
+        return json_file[item]
+
 
 def search_by_price(price):
     # Input validation

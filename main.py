@@ -120,10 +120,37 @@ def update_item():
 
 # Dysfunctional - awaiting full implementation.
 def edit_item():
-    push_location("Edit Item")
-    show_location()
-    new_name = input("New name (leave blank to keep): ")
-    log(f"Edited {'item_id'} -> Name={new_name or '(unchanged)'}")
+    #Initialise loop
+    running = True
+    while running:
+        push_location("Edit Item")
+        show_location()
+        stock = datahandler.view_all()
+        print(stock)
+
+        name = input("Which item would you like to edit: ").capitalize()
+        #Checks if item is not inside the stock
+
+        if name not in stock:
+            log("Item with that name couldn't be found")
+            break
+
+        new_property = input("Which property would like to edit"
+                             "\n1. Price"
+                             "\n2. Quantity: ").lower()
+        #Assigns property to its relevant property
+        if new_property == "1":
+            new_property = "price"
+        elif new_property == "2":
+            new_property = "quantity"
+        else:
+            print("Property couldn't be edited")
+
+
+        new_value = int(input(f"Enter the new value for {new_property}: "))
+        #Item would be updated and saved inside the datahandler
+        updated_item = datahandler.update_item(name, "price", new_value)
+        log(f"Edited {updated_item['item_id']} -> {new_property}={name or '(unchanged)'}")
     pop_location()
 
 
