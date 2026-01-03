@@ -79,7 +79,7 @@ def main():
 def add_item():
     push_location("Add Item")
     show_location()
-    name = input("Enter item name: ").strip()
+    name = input("Enter item name: ").strip().capitalize()
     price = input("Enter item price: ").strip()
     quantity = input("Enter item quantity: ").strip()
     result = datahandler.add_item(name, price, quantity) # Add item
@@ -144,31 +144,42 @@ def edit_item():
         elif new_property == "2":
             new_property = "quantity"
         else:
-            print("Property couldn't be edited")
+            log("Property couldn't be edited")
+            break
 
+        try:
 
-        new_value = int(input(f"Enter the new value for {new_property}: "))
-        #Item would be updated and saved inside the datahandler
-        updated_item = datahandler.update_item(name, "price", new_value)
-        log(f"Edited {updated_item['item_id']} -> {new_property}={name or '(unchanged)'}")
+            new_value = int(input(f"Enter the new value for {new_property}: "))
+        except ValueError:
+            log("Value should a number")
+        else:
+            #Item would be updated and saved inside the datahandler
+            updated_item = datahandler.update_item(name, "price", new_value)
+            log(f"Edited {updated_item['item_id']} -> {new_property}={name or '(unchanged)'}")
     pop_location()
 
 
 def delete_item():
-    push_location("Delete Item")
-    show_location()
-    #Displays the stock
-    stock = datahandler.view_all()
 
-    if len(stock) == 0:
-        log("No items in stock")
+    while True:
+        push_location("Delete Item")
+        show_location()
+        #Displays the stock
+        stock = datahandler.view_all()
 
-    else:
-        log(stock)
-        item = input("Which item would you like to delete: ").capitalize()
-        deleted_item = datahandler.delete_item(item)
-        #Logs the deleted item's id
-        log(f"Deleted ({deleted_item[1]}) ")
+        if len(stock) == 0:
+            log("No items in stock")
+            break
+
+        else:
+            log(stock)
+            item = input("Which item would you like to delete: ").capitalize()
+            if item not in stock:
+                print("item could not be found")
+                break
+            deleted_item = datahandler.delete_item(item)
+            #Logs the deleted item's id
+            log(f"Deleted ({deleted_item[1]}) ")
     pop_location()
 
 
