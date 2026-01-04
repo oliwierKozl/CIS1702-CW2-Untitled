@@ -119,12 +119,13 @@ def add_item():
     price = -1
     quantity = -1
     while valid_string(name, 64) == False:
-        name = input("Enter item name: \n").strip().lower()
+        name = input("Enter item name: \n").strip().capitalize()
     while valid_num(price, 0, 9999) == False:
         price = input("Enter item price: \n").strip()
     while valid_num(quantity, 0, 9999) == False:
         quantity = input("Enter item quantity: \n").strip()
     result = datahandler.add_item(name, price, quantity)
+    main()
     log(result)
     pop_location()
 
@@ -138,6 +139,7 @@ def view_stock():
     else:
         for item in stock:
             log(item)
+    main()
     pop_location()
 
 # Includes delete item function.
@@ -162,32 +164,73 @@ def update_item():
 
 # Dysfunctional - awaiting full implementation.
 def edit_item():
-    push_location("Edit Item")
-    show_location()
-    new_name = ""
-    while valid_string(new_name, 64) == False:
-        new_name = input("New name: ")
-    log(f"Edited {'item_id'} -> Name={new_name or '(unchanged)'}")
+    #Initialise loop
+    running = True
+    name = ""
+    new_property = ""
+    new_value = -1
+    while running:
+        push_location("Edit Item")
+        show_location()
+        stock = datahandler.view_all()
+        print(stock)
+
+        while valid_string(name, 64) == False:
+          name = input("Which item would you like to edit: ").capitalize()
+        #Checks if item is not inside the stock
+
+        if name not in stock:
+            log("Item with that name couldn't be found")
+            break
+
+        while valid_choice(new_property, 1, 2, False) == False:
+          new_property = input("Which property would like to edit"
+                               "\n1. Price"
+                               "\n2. Quantity: ").lower()
+        #Assigns property to its relevant property
+        if new_property == "1":
+            new_property = "price"
+        elif new_property == "2":
+            new_property = "quantity"
+        else:
+            log("Property couldn't be edited")
+            break
+
+        try:
+            while valid_num(new_value, 0, 9999) == False: 
+              new_value = int(input(f"Enter the new value for {new_property}: "))
+        except ValueError:
+            log("Value should a number")
+        else:
+            #Item would be updated and saved inside the datahandler
+            updated_item = datahandler.update_item(name, "price", new_value)
+            log(f"Edited {updated_item['item_id']} -> {new_property}={name or '(unchanged)'}")
     pop_location()
 
 
 def delete_item():
-    push_location("Delete Item")
-    show_location()
-    #Displays the stock
-    stock = datahandler.view_all()
+    item = ""
 
-    if len(stock) == 0:
-        log("No items in stock")
+    while True:
+        push_location("Delete Item")
+        show_location()
+        #Displays the stock
+        stock = datahandler.view_all()
 
-    else:
-        log(stock)
-        item = ""
-        while valid_string(item, 64) == False:
-            item = input("Which item would you like to delete: ")
-        deleted_item = datahandler.delete_item(item)
-        #Logs the deleted item's id
-        log(f"Deleted ({deleted_item[1]}) ")
+        if len(stock) == 0:
+            log("No items in stock")
+            break
+
+        else:
+            log(stock)
+            while valid_string(item, 64) == False: 
+              item = input("Which item would you like to delete: ").capitalize()
+            if item not in stock:
+                print("item could not be found")
+                break
+            deleted_item = datahandler.delete_item(item)
+            #Logs the deleted item's id
+            log(f"Deleted ({deleted_item[1]}) ")
     pop_location()
 
 
