@@ -137,8 +137,13 @@ def view_stock():
     if len(stock) == 0:
         log("Nothing is in stock")
     else:
-        for item in stock:
+        log("-------------------")
+        for item, data in stock.items():
             log(item)
+            log(f"Item ID: {data['item_id']}")
+            log(f"Quantity: {data['quantity']}")
+            log(f"Price: £{data['price']}")
+            log("-------------------")
     main()
     pop_location()
 
@@ -157,7 +162,7 @@ def update_item():
     if update_search == "1":
         edit_item()
     elif update_search == "2":
-        delete_item()
+        delete_item()   
     elif update_search == "b":
         main()
     pop_location()
@@ -173,7 +178,6 @@ def edit_item():
         push_location("Edit Item")
         show_location()
         stock = datahandler.view_all()
-        print(stock)
 
         while valid_string(name, 64) == False:
           name = input("Which item would you like to edit: ").capitalize()

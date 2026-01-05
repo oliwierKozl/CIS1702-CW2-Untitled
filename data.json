@@ -8,5 +8,10 @@
         "item_id": "42d2",
         "quantity": 50,
         "price": 2334
+    },
+    "Mousepad": {
+        "item_id": "476c",
+        "quantity": 10,
+        "price": 5
     }
 }
