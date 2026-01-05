@@ -1,3 +1,4 @@
+# python
 # CIS 1702 - CW2 - Inventory Management System
 """
 TODO:
@@ -13,7 +14,7 @@ import datahandler
 
 # Path always includes "Inventory management system" and "Main Menu".
 current_path = ["Inventory Management System", "Main Menu"]
-persistent_logs = []
+
 
 def clear_screen():
     if sys.stdout.isatty():
@@ -21,60 +22,56 @@ def clear_screen():
     else:
         print("\n" * 100, end="", flush=True)
 
-# Persistence for relevant things (e.g. view stock, search results).
-def log(msg: str):
-    persistent_logs.append(msg)
-    print(msg)
-    
+
 # Current path and location.
 def push_location(name: str):
     current_path.append(name)
 
-#Removes the last path, used when we go back to the menu
+
+# Removes the last path, used when we go back to the menu
 def pop_location():
     if len(current_path) > 1:
         current_path.pop()
 
+
 # String formatting for the directory tree.
 def show_location():
-    clear_screen()
     app_name = current_path[0]
     parts = current_path[1:]
     if parts:
         location = (
-            " > ".join(parts[:-1] + [f"«{parts[-1]}»"]) 
-            if len(parts) > 1 
+            " > ".join(parts[:-1] + [f"«{parts[-1]}»"])
+            if len(parts) > 1
             else f"«{parts[0]}»"
         )
     else:
         location = f"«{app_name}»"
     print(f"{app_name} - {location}")
-    if persistent_logs:
-        print("\n")  # Space between header and logs.
-        for msg in persistent_logs:
-            print(msg)
+
 
 def valid_choice(num: str, min: float, max: float, allow_chars: bool):
-    if num == "q" or num =="b" and allow_chars == True:
-        return(True)
+    if num == "q" or num == "b" and allow_chars == True:
+        return (True)
     try:
         num = int(num)
         if min <= num <= max:
-            return(True)
+            return (True)
     except:
         print("Invalid input")
-        return(False)
-    return(False)
+        return (False)
+    return (False)
+
 
 def valid_num(num: str, min: float, max: float):
     try:
         num = float(num)
         if min <= num <= max:
-            return(True)
+            return (True)
     except:
         print("Invalid input")
-        return(False)
-    return(False)
+        return (False)
+    return (False)
+
 
 def valid_string(text: str, max_length: int):
     try:
@@ -82,11 +79,12 @@ def valid_string(text: str, max_length: int):
     except:
         print("Invalid input - must be a string")
     if text.isalnum() == True and 1 <= len(text) <= max_length:
-        return(True)
+        return (True)
     clear_screen()
     show_location()
     print("Name must consist of letters and numbers and be less than 64 characters.")
-    return(False)
+    return (False)
+
 
 def main():
     choice = ""
@@ -99,7 +97,7 @@ def main():
             "4. Search\n"
             "q. Quit\n"
             "Select: "
-            ).strip().lower()
+        ).strip().lower()
     if choice == "1":
         add_item()
     elif choice == "2":
@@ -108,8 +106,9 @@ def main():
         update_item()
     elif choice == "4":
         search()
-    elif choice == "q" or choice =="b":
+    elif choice == "q" or choice == "b":
         quit()
+
 
 def add_item():
     push_location("Add Item")
@@ -126,26 +125,28 @@ def add_item():
         quantity = input("Enter item quantity: \n").strip()
     result = datahandler.add_item(name, price, quantity)
     main()
-    log(result)
+    print(result)
     pop_location()
+
 
 # Displays all items in stock.
 def view_stock():
     push_location("View Stock")
     show_location()
     stock = datahandler.view_all()
-    if len(stock) == 0:
-        log("Nothing is in stock")
+    if not stock:
+        print("Nothing is in stock")
     else:
-        log("-------------------")
+        print("-------------------")
         for item, data in stock.items():
-            log(item)
-            log(f"Item ID: {data['item_id']}")
-            log(f"Quantity: {data['quantity']}")
-            log(f"Price: £{data['price']}")
-            log("-------------------")
+            print(item)
+            print(f"Item ID: {data['item_id']}")
+            print(f"Quantity: {data['quantity']}")
+            print(f"Price: £{data['price']}")
+            print("-------------------")
     main()
     pop_location()
+
 
 # Includes delete item function.
 def update_item():
@@ -158,18 +159,19 @@ def update_item():
             "2. Delete Item\n"
             "b. Back\n"
             "Select: "
-            ).strip().lower()
+        ).strip().lower()
     if update_search == "1":
         edit_item()
     elif update_search == "2":
-        delete_item()   
+        delete_item()
     elif update_search == "b":
         main()
     pop_location()
 
+
 # Dysfunctional - awaiting full implementation.
 def edit_item():
-    #Initialise loop
+    # Initialise loop
     running = True
     name = ""
     new_property = ""
@@ -180,35 +182,35 @@ def edit_item():
         stock = datahandler.view_all()
 
         while valid_string(name, 64) == False:
-          name = input("Which item would you like to edit: ").capitalize()
-        #Checks if item is not inside the stock
+            name = input("Which item would you like to edit: ").capitalize()
+        # Checks if item is not inside the stock
 
         if name not in stock:
-            log("Item with that name couldn't be found")
+            print("Item with that name couldn't be found")
             break
 
         while valid_choice(new_property, 1, 2, False) == False:
-          new_property = input("Which property would like to edit"
-                               "\n1. Price"
-                               "\n2. Quantity: ").lower()
-        #Assigns property to its relevant property
+            new_property = input("Which property would like to edit"
+                                 "\n1. Price"
+                                 "\n2. Quantity: ").lower()
+        # Assigns property to its relevant property
         if new_property == "1":
             new_property = "price"
         elif new_property == "2":
             new_property = "quantity"
         else:
-            log("Property couldn't be edited")
+            print("Property couldn't be edited")
             break
 
         try:
-            while valid_num(new_value, 0, 9999) == False: 
-              new_value = int(input(f"Enter the new value for {new_property}: "))
+            while valid_num(new_value, 0, 9999) == False:
+                new_value = int(input(f"Enter the new value for {new_property}: "))
         except ValueError:
-            log("Value should a number")
+            print("Value should a number")
         else:
-            #Item would be updated and saved inside the datahandler
+            # Item would be updated and saved inside the datahandler
             updated_item = datahandler.update_item(name, "price", new_value)
-            log(f"Edited {updated_item['item_id']} -> {new_property}={name or '(unchanged)'}")
+            print(f"Edited {updated_item['item_id']} -> {new_property}={name or '(unchanged)'}")
     pop_location()
 
 
@@ -218,23 +220,23 @@ def delete_item():
     while True:
         push_location("Delete Item")
         show_location()
-        #Displays the stock
+        # Displays the stock
         stock = datahandler.view_all()
 
         if len(stock) == 0:
-            log("No items in stock")
+            print("No items in stock")
             break
 
         else:
-            log(stock)
-            while valid_string(item, 64) == False: 
-              item = input("Which item would you like to delete: ").capitalize()
+            print(stock)
+            while valid_string(item, 64) == False:
+                item = input("Which item would you like to delete: ").capitalize()
             if item not in stock:
                 print("item could not be found")
                 break
             deleted_item = datahandler.delete_item(item)
-            #Logs the deleted item's id
-            log(f"Deleted ({deleted_item[1]}) ")
+            # Prints the deleted item's id
+            print(f"Deleted ({deleted_item[1]}) ")
     pop_location()
 
 
@@ -259,19 +261,21 @@ def search():
             break
     pop_location()
 
+
 def search_by_name():
     push_location("Search by Name")
     show_location()
-    q = input("Name: ") 
+    q = input("Name: ")
     item = datahandler.view_item(q)
     if type(item) == str:
-        log(item)
+        print(item)
     else:
-        log(f"Results for item {q}")
-        log(f"ID: {item['item_id']}")
-        log(f"Price: {item['price']}")
-        log(f"Quantity: {item['quantity']}")
+        print(f"Results for item {q}")
+        print(f"ID: {item['item_id']}")
+        print(f"Price: {item['price']}")
+        print(f"Quantity: {item['quantity']}")
     pop_location()
+
 
 def search_by_price():
     push_location("Search by Price")
@@ -281,16 +285,17 @@ def search_by_price():
 
     # Check if there are any results
     if len(results) < 1:
-        log("No items found")
+        print("No items found")
     else:
         for item, value in results.items():
-            log(f"Item name: {item}")
-            log(f"Item ID: {value['item_id']}")
-            log(f"Price: {value['price']}")
-            log(f"Quantity: {value['quantity']}")
-            log("\n--------\n")
+            print(f"Item name: {item}")
+            print(f"Item ID: {value['item_id']}")
+            print(f"Price: {value['price']}")
+            print(f"Quantity: {value['quantity']}")
+            print("\n--------\n")
 
     pop_location()
+
 
 def search_by_quantity():
     push_location("Search by Quantity")
@@ -300,16 +305,17 @@ def search_by_quantity():
 
     # Check if there are any results
     if len(results) < 1:
-        log("No items found")
+        print("No items found")
     else:
         for item, value in results.items():
-            log(f"Item name: {item}")
-            log(f"Item ID: {value['item_id']}")
-            log(f"Price: {value['price']}")
-            log(f"Quantity: {value['quantity']}")
-            
-            log("\n--------\n")
+            print(f"Item name: {item}")
+            print(f"Item ID: {value['item_id']}")
+            print(f"Price: {value['price']}")
+            print(f"Quantity: {value['quantity']}")
+
+            print("\n--------\n")
     pop_location()
+
 
 if __name__ == "__main__":
     main()
