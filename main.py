@@ -1,5 +1,4 @@
 # CIS 1702 - CW2 - Inventory Management System
-
 import uuid
 import datahandler
 
@@ -12,7 +11,7 @@ def push_location(name: str):
     current_path.append(name)
 
 
-# Removes the last path used when we go back to the menu
+# Removes the last path, used when we go back to the menu
 def pop_location():
     if len(current_path) > 1:
         current_path.pop()
@@ -134,8 +133,6 @@ def add_item():
     print(result)
     return
 
-
-
 # Displays all items in stock.
 def view_stock():
     push_location("View Stock")
@@ -177,22 +174,26 @@ def update_item():
     finally:
         pop_location()
 
+# Dysfunctional - awaiting full implementation.
 def edit_item():
     push_location("Edit Item")
     try:
+        stock = datahandler.view_all()
+        if not stock:
+            show_location()
+            print("No items in stock")
+            return
+
         while True:
             show_location()
-            stock = datahandler.view_all()
-
-            # Name input with back option
-            name = ""
-            while True:
-                temp = input("Which item would you like to edit (or `b` to go back): ").strip()
-                if temp.lower() == "b":
-                    return
-                if valid_string(temp, 64):
-                    name = temp.capitalize()
-                    break
+            for item_name in stock.keys():
+                print(item_name)
+            temp = input("Which item would you like to edit (or `b` to go back): ").strip()
+            if temp.lower() == "b":
+                return
+            if not valid_string(temp, 64):
+                continue
+            name = temp.capitalize()
 
             if name not in stock:
                 print("Item with that name couldn't be found")
@@ -224,7 +225,6 @@ def edit_item():
                     try:
                         new_value = int(temp)
                     except ValueError:
-                        # If price could be float consider float conversion keep int to match existing code
                         new_value = int(float(temp))
                     break
 
@@ -233,6 +233,7 @@ def edit_item():
             return
     finally:
         pop_location()
+
 
 def delete_item():
     push_location("Delete Item")
@@ -319,7 +320,6 @@ def search_by_price():
 
     pop_location()
 
-
 def search_by_quantity():
     push_location("Search by Quantity")
     show_location()
@@ -338,7 +338,6 @@ def search_by_quantity():
 
             print("\n--------\n")
     pop_location()
-
 
 if __name__ == "__main__":
     main()
