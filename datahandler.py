@@ -80,7 +80,6 @@ def update_item(item, property, value):
             print(json_file[item][property])
             if json_file[item][property]:
                 json_file[item][property] = value # Update the value of the passed in property with value
-                print(json_file)
             else:
                 file.close()
                 return "Property does not exist"
