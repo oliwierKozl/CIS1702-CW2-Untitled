@@ -55,12 +55,13 @@ def view_item(item_name):
         json_file = json.load(file)
         
         # Check if item exists
-        if json_file[item_name]:
-            file.close()
-            return json_file[item_name] # Return a list with the item's properties
+        try:
+             json_file[item_name]
+        except KeyError:
+            return "Item was not found"
         else:
             file.close()
-            return "Item not found"
+            return json_file[item_name] # Return a list with the item's properties
         
 
 def update_item(item, property, value):
@@ -131,7 +132,7 @@ def search_by_quantity(quantity):
         try:
             quantity = int(quantity)
         except:
-            return "Quantity must be an integer"
+            return ""
         
     with open("data.json", "r") as file:
         json_file = json.load(file)

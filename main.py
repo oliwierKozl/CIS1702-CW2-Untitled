@@ -266,78 +266,130 @@ def delete_item():
 
 def search():
     push_location("Search")
-    while True:
-        show_location()
-        search_choice = input(
-            "1. By Name\n"
-            "2. By Price\n"
-            "3. By Quantity\n"
-            "b. back\n"
-            "Select: "
-        ).strip().lower()
-        if search_choice == "1":
-            search_by_name()
-        elif search_choice == "2":
-            search_by_price()
-        elif search_choice == "3":
-            search_by_quantity()
-        elif search_choice == "b":
-            break
-    pop_location()
+    try:
+        while True:
+            show_location()
+            search_choice = input(
+                "1. By Name\n"
+                "2. By Price\n"
+                "3. By Quantity\n"
+                "b. back\n"
+                "Select: "
+            ).strip().lower()
+            if not valid_choice(search_choice, 1, 3, True):
+                continue
+            if search_choice == "1":
+                search_by_name()
+            elif search_choice == "2":
+                search_by_price()
+            elif search_choice == "3":
+                search_by_quantity()
+            elif search_choice == "b":
+                break
+    finally:
+        pop_location()
 
 
 def search_by_name():
     push_location("Search by Name")
-    show_location()
-    q = input("Name: ")
-    item = datahandler.view_item(q)
-    if type(item) == str:
-        print(item)
-    else:
-        print(f"Results for item {q}")
-        print(f"ID: {item['item_id']}")
-        print(f"Price: {item['price']}")
-        print(f"Quantity: {item['quantity']}")
-    pop_location()
+    while True:
+        show_location()
+        while True:
+            temp = input("Name: (or `b` to go back)\n").capitalize()
+            if temp.lower() == "b":
+                pop_location()
+                return
+            if valid_string(temp, 64):
+                q = temp.capitalize()
+                pop_location()
+                break
+        while True:
+            item = datahandler.view_item(q)
+            if type(item) == str:
+                pop_location()
+                print(item)
+                return
+            else:
+                print(f"Results for item {q}")
+                print(f"ID: {item['item_id']}")
+                print(f"Price: {item['price']}")
+                print(f"Quantity: {item['quantity']}")
+                break
+        pop_location()
+        return
 
 
 def search_by_price():
     push_location("Search by Price")
-    show_location()
-    q = input("Price: ")
-    results = datahandler.search_by_price(q)
+    while True:
+        show_location()
+        while True:
+            temp = input("Price: (or `b` to back out)\n")
+            if temp.lower() == "b":
+                pop_location()
+                return
+            if valid_string(temp, 64):
+                q = temp.capitalize()
+                break
+        while True:
+            results = datahandler.search_by_price(q)
 
-    # Check if there are any results
-    if len(results) < 1:
-        print("No items found")
-    else:
-        for item, value in results.items():
-            print(f"Item name: {item}")
-            print(f"Item ID: {value['item_id']}")
-            print(f"Price: {value['price']}")
-            print(f"Quantity: {value['quantity']}")
-            print("\n--------\n")
+            # Check if there are any results
+            if len(results) < 1:
+                print("No items found")
+                pop_location()
+                return
+            elif type(results) == str:
+                print(results)
+                pop_location()
+                return
+            else:
+                for item, value in results.items():
+                    print(f"Item name: {item}")
+                    print(f"Item ID: {value['item_id']}")
+                    print(f"Price: {value['price']}")
+                    print(f"Quantity: {value['quantity']}")
+                    print("\n--------\n")
+                pop_location()
+                return
 
-    pop_location()
+
 
 def search_by_quantity():
     push_location("Search by Quantity")
-    show_location()
-    q = input("Quantity: ")
-    results = datahandler.search_by_quantity(q)
+    while True:
+        show_location()
+        while True:
+            temp = input("Quantity: (click `b` to go back):\n")
+            if temp.lower() == 'b':
+                return
+            if valid_string(temp, 64):
+                q = temp.capitalize()
 
-    # Check if there are any results
-    if len(results) < 1:
-        print("No items found")
-    else:
-        for item, value in results.items():
-            print(f"Item name: {item}")
-            print(f"Item ID: {value['item_id']}")
-            print(f"Price: {value['price']}")
-            print(f"Quantity: {value['quantity']}")
+                break
+        while True:
+            results = datahandler.search_by_quantity(q)
 
-            print("\n--------\n")
-    pop_location()
+            # Check if there are any results
+            if len(results) < 1:
+                print("No items found")
+                pop_location()
+                return
+            elif type(results) == str:
+                print(results)
+                pop_location()
+                return
+            else:
+                for item, value in results.items():
+                    print(f"Item name: {item}")
+                    print(f"Item ID: {value['item_id']}")
+                    print(f"Price: {value['price']}")
+                    print(f"Quantity: {value['quantity']}")
+
+                    print("\n--------\n")
+                pop_location()
+                return
+
 
 if __name__ == "__main__":
     main()
