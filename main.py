@@ -1,17 +1,9 @@
-# python
 # CIS 1702 - CW2 - Inventory Management System
-"""
-TODO:
-- Add a directory tree to see what submenu you are in etc. - DONE
-- add actual data handling (json read/write) - oliver
-- input validation - luca
-- testing
-"""
 
 import uuid
 import datahandler
 
-# Path always includes "Inventory management system" and "Main Menu".
+# Path always includes "Inventory management system" and "Main Menu"
 current_path = ["Inventory Management System", "Main Menu"]
 
 
@@ -20,7 +12,7 @@ def push_location(name: str):
     current_path.append(name)
 
 
-# Removes the last path, used when we go back to the menu
+# Removes the last path used when we go back to the menu
 def pop_location():
     if len(current_path) > 1:
         current_path.pop()
@@ -77,48 +69,71 @@ def valid_string(text: str, max_length: int):
     print("Name must consist of letters and numbers and be less than 64 characters.")
     return (False)
 
-
 def main():
-    choice = ""
-    while valid_choice(choice, 1, 4, True) == False:
-        show_location()
-        choice = input(
-            "1. Add Item\n"
-            "2. View Stock\n"
-            "3. Update Item\n"
-            "4. Search\n"
-            "q. Quit\n"
-            "Select: "
-        ).strip().lower()
-    if choice == "1":
-        add_item()
-    elif choice == "2":
-        view_stock()
-    elif choice == "3":
-        update_item()
-    elif choice == "4":
-        search()
-    elif choice == "q" or choice == "b":
-        quit()
+    while True:
+        choice = ""
+        while not valid_choice(choice, 1, 4, True):
+            show_location()
+            choice = input(
+                "1. Add Item\n"
+                "2. View Stock\n"
+                "3. Update Item\n"
+                "4. Search\n"
+                "q. Quit\n"
+                "Select: "
+            ).strip().lower()
+
+        if choice == "1":
+            add_item()
+        elif choice == "2":
+            view_stock()
+        elif choice == "3":
+            update_item()
+        elif choice == "4":
+            search()
+        elif choice == "q":
+            quit()
+        elif choice == "b":
+            continue
 
 
 def add_item():
     push_location("Add Item")
     show_location()
     print("b. Back\n")
+
+    # Name
     name = ""
-    price = -1
-    quantity = -1
-    while valid_string(name, 64) == False:
-        name = input("Enter item name: \n").strip().lower().capitalize()
-    while valid_num(price, 0, 9999) == False:
-        price = input("Enter item price: \n").strip()
-    while valid_num(quantity, 0, 9999) == False:
-        quantity = input("Enter item quantity: \n").strip()
+    while not valid_string(name, 64):
+        temp = input("Enter item name: \n").strip()
+        if temp.lower() == "b":
+            pop_location()
+            return
+        name = temp.capitalize()
+
+    # Price
+    price = ""
+    while not valid_num(price, 0, 9999):
+        temp = input("Enter item price: \n").strip()
+        if temp.lower() == "b":
+            pop_location()
+            return
+        price = temp
+
+    # Quantity
+    quantity = ""
+    while not valid_num(quantity, 0, 9999):
+        temp = input("Enter item quantity: \n").strip()
+        if temp.lower() == "b":
+            pop_location()
+            return
+        quantity = temp
+
     result = datahandler.add_item(name, price, quantity)
-    main()
-    print(result)
     pop_location()
+    print(result)
+    return
+
 
 
 # Displays all items in stock.
@@ -139,103 +154,113 @@ def view_stock():
     main()
     pop_location()
 
-
 # Includes delete item function.
 def update_item():
     push_location("Update Item")
-    show_location()
-    update_search = ""
-    while valid_choice(update_search, 1, 2, True) == False:
-        update_search = input(
-            "1. Edit Item\n"
-            "2. Delete Item\n"
-            "b. Back\n"
-            "Select: "
-        ).strip().lower()
-    if update_search == "1":
-        edit_item()
-    elif update_search == "2":
-        delete_item()
-    elif update_search == "b":
-        main()
-    pop_location()
+    try:
+        while True:
+            show_location()
+            update_search = input(
+                "1. Edit Item\n"
+                "2. Delete Item\n"
+                "b. Back\n"
+                "Select: "
+            ).strip().lower()
+            if not valid_choice(update_search, 1, 2, True):
+                continue
+            if update_search == "1":
+                edit_item()
+            elif update_search == "2":
+                delete_item()
+            elif update_search == "b":
+                break
+    finally:
+        pop_location()
 
-
-# Dysfunctional - awaiting full implementation.
 def edit_item():
-    # Initialise loop
-    running = True
-    name = ""
-    new_value = -1
-    while running:
-        push_location("Edit Item")
-        show_location()
-        stock = datahandler.view_all()
+    push_location("Edit Item")
+    try:
+        while True:
+            show_location()
+            stock = datahandler.view_all()
 
-        while valid_string(name, 64) == False:
-            name = input("Which item would you like to edit: ").strip().capitalize()
-        # Checks if item is not inside the stock
+            # Name input with back option
+            name = ""
+            while True:
+                temp = input("Which item would you like to edit (or `b` to go back): ").strip()
+                if temp.lower() == "b":
+                    return
+                if valid_string(temp, 64):
+                    name = temp.capitalize()
+                    break
 
-        if name not in stock:
-            print("Item with that name couldn't be found")
-            edit_item()
+            if name not in stock:
+                print("Item with that name couldn't be found")
+                return
 
-        new_property = input("Which property would like to edit"
-                                 "\n1. Price"
-                                 "\n2. Quantity\n").lower()
-        while valid_choice(new_property, 1, 2, False) == False:
-            new_property = input("Which property would like to edit"
-                                 "\n1. Price"
-                                 "\n2. Quantity\n").lower()
-        # Assigns property to its relevant property
-        if new_property == "1":
-            new_property = "price"
-        elif new_property == "2":
-            new_property = "quantity"
-        else:
-            print("Property couldn't be edited")
-            main()
+            # Property selection with back option
+            prop_choice = ""
+            while True:
+                prop_choice = input(
+                    "Which property would you like to edit?\n"
+                    "1. Price\n"
+                    "2. Quantity\n"
+                    "b. Back\n"
+                    "Select: "
+                ).strip().lower()
+                if prop_choice == "b":
+                    return
+                if valid_choice(prop_choice, 1, 2, False):
+                    break
 
-        try:
-            while valid_num(new_value, 0, 9999) == False:
-                new_value = int(input(f"Enter the new value for {new_property}: "))
-        except ValueError:
-            print("Value should a number")
-        else:
-            # Item is updated and saved inside the datahandler
-            updated_item = datahandler.update_item(name, new_property, new_value)
-            print(f"Edited {updated_item['item_id']} -> {new_property}={name or '(unchanged)'}")
-            break
-        main()
-    pop_location()
-    main()
+            prop = "price" if prop_choice == "1" else "quantity"
+
+            # New value with back option
+            while True:
+                temp = input(f"Enter the new value for {prop} (or `b` to go back): ").strip()
+                if temp.lower() == "b":
+                    return
+                if valid_num(temp, 0, 9999):
+                    try:
+                        new_value = int(temp)
+                    except ValueError:
+                        # If price could be float consider float conversion keep int to match existing code
+                        new_value = int(float(temp))
+                    break
+
+            updated_item = datahandler.update_item(name, prop, new_value)
+            print(f"Edited {updated_item.get('item_id', '(unknown)')} -> {prop}={new_value}")
+            return
+    finally:
+        pop_location()
 
 def delete_item():
-    item = ""
-
-    while True:
-        push_location("Delete Item")
-        show_location()
-        # Displays the stock
+    push_location("Delete Item")
+    try:
         stock = datahandler.view_all()
-
-        if len(stock) == 0:
+        if not stock:
+            show_location()
             print("No items in stock")
-            main()
+            return
 
-        else:
-            for item, data in stock.items():
-                print(item)
-            while valid_string(item, 64) == False:
-                item = input("Which item would you like to delete: ").capitalize()
+        while True:
+            show_location()
+            for item_name in stock.keys():
+                print(item_name)
+            temp = input("Which item would you like to delete (or `b` to go back): ").strip()
+            if temp.lower() == "b":
+                return
+            if not valid_string(temp, 64):
+                continue
+            item = temp.capitalize()
             if item not in stock:
-                print("item could not be found")
-                main()
+                print("Item could not be found")
+                return
             deleted_item = datahandler.delete_item(item)
-            # Prints the deleted item's id
-            print(f"Deleted ({deleted_item[1]}) ")
-            main()
-    pop_location()
+            print(f"Deleted ({deleted_item[1]})")
+            return
+    finally:
+        pop_location()
 
 
 def search():
