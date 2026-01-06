@@ -8,19 +8,11 @@ TODO:
 - testing
 """
 
-# Python.
-import sys, uuid
+import uuid
 import datahandler
 
 # Path always includes "Inventory management system" and "Main Menu".
 current_path = ["Inventory Management System", "Main Menu"]
-
-
-def clear_screen():
-    if sys.stdout.isatty():
-        print("\033[2J\033[H", end="", flush=True)
-    else:
-        print("\n" * 100, end="", flush=True)
 
 
 # Current path and location.
@@ -52,7 +44,7 @@ def show_location():
 def valid_choice(num: str, min: float, max: float, allow_chars: bool):
     if num == "q" and allow_chars == True:
         return (True)
-    elif num =="b" and allow_chars == True:
+    elif num == "b" and allow_chars == True:
         return(True)
     try:
         num = int(num)
@@ -81,7 +73,6 @@ def valid_string(text: str, max_length: int):
         print("Invalid input - must be a string")
     if text.isalnum() == True and 1 <= len(text) <= max_length:
         return (True)
-    clear_screen()
     show_location()
     print("Name must consist of letters and numbers and be less than 64 characters.")
     return (False)
