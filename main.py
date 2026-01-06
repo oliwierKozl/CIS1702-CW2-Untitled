@@ -70,7 +70,14 @@ def valid_string(text: str, max_length: int):
 
 def main():
     while True:
-        choice = ""
+        choice = input(
+                "1. Add Item\n"
+                "2. View Stock\n"
+                "3. Update Item\n"
+                "4. Search\n"
+                "q. Quit\n"
+                "Select: "
+            ).strip().lower()
         while not valid_choice(choice, 1, 4, True):
             show_location()
             choice = input(
@@ -102,31 +109,28 @@ def add_item():
     print("b. Back\n")
 
     # Name
-    name = ""
+    name = input("Enter item name: \n").strip().capitalize()
     while not valid_string(name, 64):
-        temp = input("Enter item name: \n").strip()
-        if temp.lower() == "b":
+        name = input("Enter item name: \n").strip().capitalize()
+        if name.lower() == "b":
             pop_location()
             return
-        name = temp.capitalize()
 
     # Price
-    price = ""
+    price = input("Enter item price: \n").strip()
     while not valid_num(price, 0, 9999):
-        temp = input("Enter item price: \n").strip()
-        if temp.lower() == "b":
+        price = input("Enter item price: \n").strip()
+        if price.lower() == "b":
             pop_location()
             return
-        price = temp
 
     # Quantity
-    quantity = ""
+    quantity = input("Enter item quantity: \n").strip()
     while not valid_num(quantity, 0, 9999):
-        temp = input("Enter item quantity: \n").strip()
-        if temp.lower() == "b":
+        quantity = input("Enter item quantity: \n").strip()
+        if quantity.lower() == "b":
             pop_location()
             return
-        quantity = temp
 
     result = datahandler.add_item(name, price, quantity)
     pop_location()
@@ -155,22 +159,26 @@ def view_stock():
 def update_item():
     push_location("Update Item")
     try:
-        while True:
-            show_location()
+        show_location()
+        update_search = input(
+            "1. Edit Item\n"
+            "2. Delete Item\n"
+            "b. Back\n"
+            "Select: "
+        ).strip().lower()
+        while (valid_choice(update_search, 1, 2, False)) == False:
             update_search = input(
                 "1. Edit Item\n"
                 "2. Delete Item\n"
                 "b. Back\n"
                 "Select: "
             ).strip().lower()
-            if not valid_choice(update_search, 1, 2, True):
-                continue
-            if update_search == "1":
-                edit_item()
-            elif update_search == "2":
-                delete_item()
-            elif update_search == "b":
-                break
+        if update_search == "1":
+            edit_item()
+        elif update_search == "2":
+            delete_item()
+        elif update_search == "b":
+            main()
     finally:
         pop_location()
 
